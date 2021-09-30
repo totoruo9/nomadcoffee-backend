@@ -13,10 +13,7 @@ const CreateAccountResolver:Resolvers = {
             avatarURL,
             githubUsername
         }) => {
-            
-
             try {
-                console.log( username, email, name, password);
                 if(!username){
                     return {
                         ok: false,
@@ -51,7 +48,6 @@ const CreateAccountResolver:Resolvers = {
                 };
 
                 const hashPassword = await bcrypt.hash(password, 10);
-                console.log(hashPassword);
                 
                 await client.user.create({
                     data: {

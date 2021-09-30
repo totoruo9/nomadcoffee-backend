@@ -2,6 +2,17 @@ import client from "../client";
 
 export default {
     Query: {
-        seeUser: () => client.user.findMany({where:{id:1}}),
+        seeUser: async () => {
+            return await client.user.findMany({
+                select:{
+                    id: true,
+                    name: true,
+                    username: true,
+                    location: true,
+                    email: true,
+                    updateAt:true,
+                }
+            })
+        },
     },
 };

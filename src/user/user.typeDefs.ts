@@ -10,9 +10,17 @@ export default gql`
         password: String
         avatarURL: String
         githubUsername: String
+        updateAt: String
+        createAt: String
     }
 
     type Query {
         seeUser: [User]
+    }
+
+    type CommonResult {
+        ok: Boolean!,
+        error: String,
+        token: String
     }
 `;
