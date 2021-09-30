@@ -2,6 +2,7 @@ import client from "../../client";
 import { Resolvers } from "../../types";
 import bcrypt from "bcrypt";
 import { protectedResolvers } from "../user.utils";
+import {createWriteStream} from "fs";
 
 const EditPropfileResolvers:Resolvers = {
     Mutation: {
@@ -27,6 +28,20 @@ const EditPropfileResolvers:Resolvers = {
                 if(password){
                     hashPassword = await bcrypt.hash(password, 10);
                 }
+
+
+                let avatar = null;
+                if(avatarURL){
+                    console.log(avatarURL);
+                    const {createReadStream, filename} = await avatarURL;
+                    const newFilename = `${isLoggedIn.username}-${Date.now()}-${filename}`;
+                    const readStream = await createReadStream(`${process.cwd()}/uploads/${newFilename}`);
+                    const writeStream = createWriteStream(`${process.cwd()}/uploads/${newFilename}`);
+                    readStream.pipe(writeStream);
+                    avatar = `http://localhost:4000/static/${newFilename}`;
+                    console.log(avatar)
+                }
+
                 
                 await client.user.updateMany({
                     where:{
@@ -38,7 +53,7 @@ const EditPropfileResolvers:Resolvers = {
                         name,
                         location,
                         ...(password && {password:hashPassword}),
-                        avatarURL,
+                        ...(avatarURL && {avatarURL:avatar}),
                         githubUsername
                     }
                 });

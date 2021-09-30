@@ -1,6 +1,8 @@
 import client from "../client";
+import {GraphQLUpload} from 'graphql-upload';
 
 export default {
+    Upload: GraphQLUpload,
     Query: {
         seeUser: async () => {
             return await client.user.findMany({

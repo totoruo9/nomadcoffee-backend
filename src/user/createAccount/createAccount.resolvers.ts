@@ -1,3 +1,4 @@
+import {createWriteStream} from "fs";
 import client from "../../client";
 import {Resolvers} from "../../types";
 import bcrypt from "bcrypt";
@@ -46,6 +47,16 @@ const CreateAccountResolver:Resolvers = {
                         error:"Exisit this user"
                     }
                 };
+                let avatar = null;
+                if(avatarURL){
+                    const {createReadStream, filename} = await avatarURL;
+                    const newFilename = `${username}-${Date.now()}-${filename}`;
+                    const readStream = await createReadStream(`${process.cwd()}/uploads/${newFilename}`);
+                    const writeStream = createWriteStream(`${process.cwd()}/uploads/${newFilename}`);
+                    readStream.pipe(writeStream);
+                    avatar = `http://localhost:4000/:4000/static/${newFilename}`;
+                }
+                
 
                 const hashPassword = await bcrypt.hash(password, 10);
                 
@@ -56,7 +67,7 @@ const CreateAccountResolver:Resolvers = {
                         name,
                         location,
                         password:hashPassword,
-                        avatarURL,
+                        ...(avatarURL && {avatarURL:avatar}),
                         githubUsername
                     }
                 });

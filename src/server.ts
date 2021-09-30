@@ -8,6 +8,7 @@ import http from 'http';
 import { typeDefs, resolvers } from "./schema";
 import { getUser } from "./user/user.utils";
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 const schema = makeExecutableSchema({typeDefs, resolvers});
 
@@ -26,6 +27,9 @@ const startApolloServer = async () => {
   });
 
   await server.start();
+  
+  app.use("/static", express.static("uploads"));
+  app.use(graphqlUploadExpress());
 
   server.applyMiddleware({app});
 
