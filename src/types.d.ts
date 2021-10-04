@@ -1,4 +1,8 @@
-export type Resolver = (root: any, args: any, context: any, info: any) => any;
+type Context = {
+    isLoggedIn: any
+}
+
+export type Resolver = (root: any, args: any, context: Context, info: any) => any;
 
 export type Resolvers = {
     [key:string]:{

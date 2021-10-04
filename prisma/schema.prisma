@@ -11,14 +11,16 @@ generator client {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  username String @unique
-  email String  @unique
-  name  String
-  location String?
-  password String
-  avatarURL String?
+  id             Int      @id @default(autoincrement())
+  username       String   @unique
+  email          String   @unique
+  name           String
+  location       String?
+  password       String
+  avatarURL      String?
   githubUsername String?
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  followers      User[]   @relation("FollowRelation", references: [id])
+  following      User[]   @relation("FollowRelation", references: [id])
+  createAt       DateTime @default(now())
+  updateAt       DateTime @updatedAt
 }

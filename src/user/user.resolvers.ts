@@ -17,4 +17,22 @@ export default {
             })
         },
     },
+    User: {
+        following: ({id}:any,{page}:any) => (
+            client.user.findUnique({
+                where:{id}
+            }).following({
+                take:5,
+                skip:(page-1)*5
+            })
+        ),
+        followers: ({id}:any, {page}:any) => (
+            client.user.findUnique({
+                where:{id}
+            }).followers({
+                take:5,
+                skip:(page-1)*5
+            })
+        )
+    }
 };

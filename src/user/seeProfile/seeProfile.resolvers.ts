@@ -8,6 +8,10 @@ const SeeProfileResolvers:Resolvers = {
                 const findUser = await client.user.findUnique({
                     where:{
                         username
+                    },
+                    include:{
+                        followers: true,
+                        following: true
                     }
                 });
     
